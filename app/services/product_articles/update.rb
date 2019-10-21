@@ -9,19 +9,15 @@ module ProductArticles
     def call
       return unless product_article || related_articles.any?
 
-      update_articles
+      related_articles.map(&method(:create_related_article))
     end
 
     private
 
     attr_reader :params
 
-    def update_articles
-      related_articles.map do |related_article|
-        RelatedArticle.create(
-          product_article: product_article, related_article: related_article
-        )
-      end
+    def create_related_article(related_article)
+      Article.create(product_article: product_article, related_article: related_article)
     end
 
     def related_articles

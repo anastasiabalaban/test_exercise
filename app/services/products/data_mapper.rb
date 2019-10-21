@@ -2,8 +2,8 @@
 
 module Products
   class DataMapper < ApplicationService
-    def initialize(params = {})
-      @params = params[:params]
+    def initialize(params:)
+      @params = params
     end
 
     def call
@@ -39,15 +39,24 @@ module Products
     end
 
     def product_sizes_attributes
-      params[:sizes].map { |size| size_params(size) }
+      params[:sizes].map do |size|
+        size_params(size).merge(additional_size_params(size[:name]))
+      end
     end
 
     def size_params(size)
       {
         sku:       size[:size_sku],
-        available: size[:available],
-        size:      Size.find_or_create_by(name: size[:name])
+        available: size[:available]
       }
+    end
+
+    def additional_size_params(name)
+      size(name) ? { size: size(name) } : { size_attributes: { name: name } }
+    end
+
+    def size(name)
+      @size ||= Size.find_by(name: name)
     end
 
     def photos_attributes

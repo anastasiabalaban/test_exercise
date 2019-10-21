@@ -18,7 +18,7 @@ module TestTasks
     attr_reader :size_set
 
     def select_order
-      (size_set & SIZE_ORDER_1).any? ? SIZE_ORDER_1 : SIZE_ORDER_2
+      @select_order ||= (size_set & SIZE_ORDER_1).any? ? SIZE_ORDER_1 : SIZE_ORDER_2
     end
   end
 end

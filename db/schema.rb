@@ -15,6 +15,13 @@ ActiveRecord::Schema.define(version: 2019_10_20_190303) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "articles", force: :cascade do |t|
+    t.bigint "product_article_id"
+    t.bigint "related_article_id"
+    t.index ["product_article_id"], name: "index_articles_on_product_article_id"
+    t.index ["related_article_id"], name: "index_articles_on_related_article_id"
+  end
+
   create_table "product_articles", force: :cascade do |t|
     t.string "name"
     t.string "url"
@@ -50,13 +57,6 @@ ActiveRecord::Schema.define(version: 2019_10_20_190303) do
     t.string "sku"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "related_articles", force: :cascade do |t|
-    t.bigint "product_article_id"
-    t.bigint "related_article_id"
-    t.index ["product_article_id"], name: "index_related_articles_on_product_article_id"
-    t.index ["related_article_id"], name: "index_related_articles_on_related_article_id"
   end
 
   create_table "sizes", force: :cascade do |t|
